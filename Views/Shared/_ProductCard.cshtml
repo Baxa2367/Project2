@@ -1,0 +1,36 @@
+@model ProductCatalog.Models.Product
+
+<article class="product-card h-100">
+    <div class="product-visual">
+        @if (!string.IsNullOrWhiteSpace(Model.ImageUrl))
+        {
+            <img class="product-image" src="@Model.ImageUrl" alt="@Model.Name" loading="lazy" />
+        }
+        else
+        {
+            <span class="product-icon"><i class="bi @Model.Icon"></i></span>
+        }
+        @if (Model.IsAvailable)
+        {
+            <span class="stock-badge in-stock"><i class="bi bi-check-circle-fill"></i> Қолжетімді</span>
+        }
+        else
+        {
+            <span class="stock-badge out-stock"><i class="bi bi-clock-fill"></i> Уақытша жоқ</span>
+        }
+    </div>
+    <div class="product-content">
+        <div class="product-category">@Model.Category</div>
+        <h3 class="product-title">@Model.Name</h3>
+        <p class="product-description">@Model.Description</p>
+        <div class="product-bottom">
+            <div>
+                <div class="price-label">Бағасы</div>
+                <div class="product-price">@Model.Price.ToString("N0") ₸</div>
+            </div>
+            <a class="btn btn-product" asp-controller="Product" asp-action="Details" asp-route-id="@Model.Id" aria-label="@Model.Name туралы">
+                <i class="bi bi-arrow-up-right"></i>
+            </a>
+        </div>
+    </div>
+</article>

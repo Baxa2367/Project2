@@ -1,0 +1,87 @@
+@model IEnumerable<ProductCatalog.Models.Product>
+@{
+    ViewData["Title"] = "Тауарлар каталогы";
+    var categories = ViewBag.Categories as List<string> ?? new List<string> { "Барлығы" };
+}
+
+<section class="hero-section">
+    <div class="container hero-inner">
+        <div class="hero-copy">
+            <span class="eyebrow"><span class="eyebrow-dot"></span> QAZMARKET КАТАЛОГЫ</span>
+            <h1>Керегіңнің бәрі<br><span>бір каталогта.</span></h1>
+            <p>Технология, жұмыс және күнделікті өмірге арналған таңдаулы тауарлар.</p>
+            <a href="#catalog" class="btn btn-hero">Каталогты көру <i class="bi bi-arrow-down-right"></i></a>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+            <div class="art-orbit orbit-one"></div>
+            <div class="art-orbit orbit-two"></div>
+            <div class="art-core"><i class="bi bi-bag-check-fill"></i></div>
+            <span class="float-chip chip-top"><i class="bi bi-stars"></i> Таңдаулы тауарлар</span>
+            <span class="float-chip chip-bottom"><i class="bi bi-lightning-charge-fill"></i> Жылдам іздеу</span>
+        </div>
+    </div>
+</section>
+
+<section class="catalog-section" id="catalog">
+    <div class="container">
+        <div class="section-heading">
+            <div>
+                <span class="eyebrow dark-eyebrow">БІЗДІҢ ҰСЫНЫСТАР</span>
+                <h2>Тауарлар каталогы</h2>
+                <p>Өзіңізге қажетті өнімді тауып, сипаттамасымен танысыңыз.</p>
+            </div>
+            <div class="catalog-count">
+                <strong>@ViewBag.TotalProducts</strong>
+                <span>тауар каталогта</span>
+            </div>
+        </div>
+
+        <form method="get" asp-controller="Product" asp-action="Index" class="filter-panel">
+            <div class="search-box">
+                <i class="bi bi-search"></i>
+                <input type="text" name="search" value="@ViewBag.Search" placeholder="Тауар атауын іздеу..." />
+            </div>
+            <select name="category" class="form-select category-select">
+                @foreach (var item in categories)
+                {
+                    if (item == (string)ViewBag.SelectedCategory)
+                    {
+                        <option value="@item" selected>@item</option>
+                    }
+                    else
+                    {
+                        <option value="@item">@item</option>
+                    }
+                }
+            </select>
+            <button class="btn btn-filter" type="submit">Іздеу <i class="bi bi-arrow-right"></i></button>
+            <a class="btn btn-reset" asp-controller="Product" asp-action="Index" title="Сүзгіні тазалау"><i class="bi bi-arrow-counterclockwise"></i></a>
+        </form>
+
+        <div class="result-line">
+            <span>Нәтижелер: <strong>@Model.Count()</strong></span>
+            <span><i class="bi bi-check-circle-fill text-success me-1"></i>@ViewBag.AvailableProducts қолжетімді тауар</span>
+        </div>
+
+        @if (Model.Any())
+        {
+            <div class="row g-4">
+                @foreach (var product in Model)
+                {
+                    <div class="col-sm-6 col-lg-4 col-xl-3">
+                        <partial name="_ProductCard" model="product" />
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="empty-state">
+                <i class="bi bi-search"></i>
+                <h3>Тауар табылмады</h3>
+                <p>Іздеу шартын өзгертіп көріңіз немесе сүзгіні тазалаңыз.</p>
+                <a class="btn btn-filter" asp-controller="Product" asp-action="Index">Барлық тауарды көрсету</a>
+            </div>
+        }
+    </div>
+</section>
